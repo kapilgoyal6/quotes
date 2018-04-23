@@ -71,7 +71,7 @@
           <p></p>
         </div>
       <% else %>
-        <img src= "http://www.hdwallpapers.in/walls/sky_colors-wide.jpg" width="1024" height="682">
+        <img src= "http://www.hdwallpapers.in/walls/sky_colors-wide.jpg" width="1024" height="682" id="main_image">
         <div class="container">
           <h1>
             <%= highlight("I quote others only in order to better express myself", "quote") %>
@@ -108,40 +108,44 @@
 
 <script type="text/javascript" src="http://www.joelambert.co.uk/flux/js/flux.js"></script>
 
-<script type="text/javascript">
-  $(document).ready(function(){
+    <script type="text/javascript">
+    $(document).ready(function(){
 
-    $('#take_screenshot').on('click', function() {
-      $("#take_screenshot").val("Capturing ....").animate({disabled: true }, 1000);
+      $('#take_screenshot').on('click', function() {
 
-      $.ajax({
+        var image_url = $("#main_image").attr("src");
+        alert(image_url);
+        $("#take_screenshot").val("Capturing ....").animate({disabled: true }, 1000);
 
-        type: "get",
-        dataType: "json",
-        url: "/quotes/screen_shot?url=<%= @quote.image_url %>",
-        success: function(data) {
-          $("#main_image").attr("src", data["url"]);
-          successmessage = 'Data was succesfully captured';
-          html2canvas(document.body, { allowTaint : true, logging: true, useCORS: false, onrendered : function (canvas) {
-              // document.body.appendChild(canvas);
-              $('#test').attr('href', canvas.toDataURL("image/png"));
-              $('#test').attr('download', 'screenshot.png');
-              $('#test')[0].click();
-            }
-          });
+        $.ajax({
 
-          $("#take_screenshot").val("Take Screenshot").animate({disabled: false }, 1000);
+          type: "get",
+          dataType: "json",
+          url: "/quotes/screen_shot?url="+image_url,
+          success: function(data) {
+            $("#main_image").attr("src", data["url"]);
+            successmessage = 'Data was succesfully captured';
+            html2canvas(document.body, { allowTaint : true, logging: true, useCORS: false, onrendered : function (canvas) {
+                // document.body.appendChild(canvas);
+                $('#test').attr('href', canvas.toDataURL("image/png"));
+                $('#test').attr('download', 'screenshot.png');
+                $('#test')[0].click();
+              }
+            });
 
-        },
-        error: function(data) {
-          successmessage = 'Error';
-          alert(successmessage);
-        },
+            $("#take_screenshot").val("Take Screenshot").animate({disabled: false }, 1000);
+
+          },
+          error: function(data) {
+            successmessage = 'Error';
+            alert(successmessage);
+          },
+        });
       });
     });
-  });
+  </script>
 
-
+<script type="text/javascript">
   var newTime = new Date(); 
   var newTime = new Date(newTime.getTime() + 10000);
   $('#defaultCountdown').countdown({until: newTime, format: 'S'}); 
