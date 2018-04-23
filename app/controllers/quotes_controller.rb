@@ -73,15 +73,23 @@ class QuotesController < ApplicationController
 
   #Gives a random quote
   def random
-
     @quote = Quote.order("RANDOM()").first
-
     if @quote && @quote.image_url.blank?      
       @quote.image_url = get_flickr_image_url(@quote)
       @quote.save
     end
   end
 
+  def screen_shot
+    require 'open-uri'
+    live_url = params[:url]
+    open('public/screenshot_images/image.png', 'wb') do |file|
+      file << open(live_url).read
+      @file = file
+    end
+    file_path = @file.path.gsub("public/", "")
+    render json: {success: true, url: file_path }
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

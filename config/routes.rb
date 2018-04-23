@@ -1,4 +1,7 @@
 Quotes::Application.routes.draw do
+
+  get '/quotes/screen_shot' => "quotes#screen_shot"
+  
   resources :quotes
 
   # The priority is based upon order of creation: first created -> highest priority.

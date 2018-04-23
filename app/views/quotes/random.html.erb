@@ -62,7 +62,7 @@
         </div>
       </div>
       <% if @quote %>
-        <img src= "<%= @quote.image_url %>" width="1024" height="682">
+        <img src= "<%= @quote.image_url %>" width="1024" height="682" id="main_image">
         <div class="container">
           <h1>
             <%= highlight(@quote.quote, @quote.most_significant_word) %>
@@ -112,13 +112,31 @@
   $(document).ready(function(){
 
     $('#take_screenshot').on('click', function() {
+      $("#take_screenshot").val("Capturing ....").animate({disabled: true }, 1000);
 
-      html2canvas(document.body, { allowTaint : true, logging: true, useCORS: false, onrendered : function (canvas) {
-          // document.body.appendChild(canvas);
-          $('#test').attr('href', canvas.toDataURL("image/png"));
-          $('#test').attr('download', 'screenshot.png');
-          $('#test')[0].click();
-        }
+      $.ajax({
+
+        type: "get",
+        dataType: "json",
+        url: "/quotes/screen_shot?url=<%= @quote.image_url %>",
+        success: function(data) {
+          $("#main_image").attr("src", data["url"]);
+          successmessage = 'Data was succesfully captured';
+          html2canvas(document.body, { allowTaint : true, logging: true, useCORS: false, onrendered : function (canvas) {
+              // document.body.appendChild(canvas);
+              $('#test').attr('href', canvas.toDataURL("image/png"));
+              $('#test').attr('download', 'screenshot.png');
+              $('#test')[0].click();
+            }
+          });
+
+          $("#take_screenshot").val("Take Screenshot").animate({disabled: false }, 1000);
+
+        },
+        error: function(data) {
+          successmessage = 'Error';
+          alert(successmessage);
+        },
       });
     });
   });
