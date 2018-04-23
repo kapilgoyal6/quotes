@@ -48,8 +48,13 @@ mark{
       <div class="ui text menu">
         <div class="right item">
           <%= link_to quotes_path(@quote), data: { no_turbolink: true} do %>
-          <i class="circular teal large setting icon"></i> 
+            <i class="circular teal large setting icon"></i> 
           <% end %>
+
+          <div class="ui button"> 
+            <input class="ui teal button" type="submit" id="take_screenshot" value="Take Screenshot">
+          </div>
+
         </div>
       </div>
       <% if @quote %>
@@ -86,19 +91,23 @@ mark{
   });
 </script>
 
+<a id="test"></a>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
 
+<!-- <script src="javascripts/html2canvas.js"></script> -->
 
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#take_screenshot').on('click', function() {
 
-
-
-
-
-
-
-
-
-
-
-
-
+      html2canvas(document.body, { allowTaint : true, logging: true, useCORS: false, onrendered : function (canvas) {
+          // document.body.appendChild(canvas);
+          $('#test').attr('href', canvas.toDataURL("image/png"));
+          $('#test').attr('download', 'screenshot.png');
+          $('#test')[0].click();
+        }
+      });
+    });
+  });
+</script>

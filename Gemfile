@@ -7,6 +7,7 @@ gem 'rails', '4.0.2'
 # Use sqlite3 as the database for Active Record
 group :development do
 	gem 'sqlite3'
+	gem 'byebug'
 end
 
 
@@ -65,3 +66,4 @@ gem 'will_paginate', '~> 3.0'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem "webshot"
