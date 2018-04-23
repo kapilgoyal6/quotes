@@ -114,7 +114,6 @@
       $('#take_screenshot').on('click', function() {
 
         var image_url = $("#main_image").attr("src");
-        alert(image_url);
         $("#take_screenshot").val("Capturing ....").animate({disabled: true }, 1000);
 
         $.ajax({
